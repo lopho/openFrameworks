@@ -1,0 +1,26 @@
+diff --git a/addons/ofxVectorGraphics/libs/CreEPS.cpp b/addons/ofxVectorGraphics/libs/CreEPS.cpp
+index 4d8220336..d9ce69672 100644
+--- a/addons/ofxVectorGraphics/libs/CreEPS.cpp
++++ b/addons/ofxVectorGraphics/libs/CreEPS.cpp
+@@ -28,6 +28,10 @@ THE SOFTWARE.
+ *******************************************************************************/
+ 
+ #include "CreEPS.hpp"
++#include <stdlib.h>
++#include <string.h>
++#include <math.h>
++#include <time.h>
+ 
+ namespace ns_creeps
+ {
+@@ -61,10 +65,6 @@ namespace ns_creeps
+ 
+ /*********************************************************/
+ 
+-#include <stdlib.h>
+-#include <string.h>
+-#include <math.h>
+-#include <time.h>
+ 
+ /*********************************************************
+  * The attribute classes for CreEPS
