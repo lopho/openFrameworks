@@ -228,18 +228,17 @@ set(OF_EXTERNAL_DEPENDENCIES "")
 include(ExternalProject)
 
 #// tess2
-set(OF_LIBS_TESS2_PREFIX "${OF_LIBS_PATH}/tess2")
-set(OF_LIBS_TESS2_CMAKE "${OF_LIBS_TESS2_PREFIX}/cmake")
+set(OF_LIBS_TESS2_PREFIX "${CMAKE_BINARY_DIR}/tess2")
 ExternalProject_Add(tess2B
     GIT_REPOSITORY https://github.com/memononen/libtess2.git
-    PREFIX "${OF_LIBS_TESS2_CMAKE}"
-    INSTALL_DIR "${OF_LIBS_TESS2_CMAKE}/install"
+    PREFIX "${OF_LIBS_TESS2_PREFIX}"
+    INSTALL_DIR "${OF_LIBS_TESS2_PREFIX}/install"
     CMAKE_ARGS
-        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_TESS2_CMAKE}/install"
+        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_TESS2_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/tess2_CMakeLists.txt"
-                    "${OF_LIBS_TESS2_CMAKE}/src/tess2B/CMakeLists.txt"
+                    "${OF_LIBS_TESS2_PREFIX}/src/tess2B/CMakeLists.txt"
 )
 ExternalProject_Get_Property(tess2B INSTALL_DIR)
 list(APPEND OF_EXTERNAL_LIBRARY_DIRECTORIES "${INSTALL_DIR}/lib")
@@ -251,18 +250,17 @@ unset(INSTALL_DIR)
 #////////
 
 #// utf8cpp
-set(OF_LIBS_UTF8_PREFIX "${OF_LIBS_PATH}/utf8")
-set(OF_LIBS_UTF8_CMAKE "${OF_LIBS_UTF8_PREFIX}/cmake")
+set(OF_LIBS_UTF8_PREFIX "${CMAKE_BINARY_DIR}/utf8")
 ExternalProject_Add(utf8B
     SVN_REPOSITORY https://svn.code.sf.net/p/utfcpp/code
-    PREFIX "${OF_LIBS_UTF8_CMAKE}"
-    INSTALL_DIR "${OF_LIBS_UTF8_CMAKE}/install"
+    PREFIX "${OF_LIBS_UTF8_PREFIX}"
+    INSTALL_DIR "${OF_LIBS_UTF8_PREFIX}/install"
     CMAKE_ARGS
-        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_UTF8_CMAKE}/install"
+        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_UTF8_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/utf8_CMakeLists.txt"
-                    "${OF_LIBS_UTF8_CMAKE}/src/utf8B/CMakeLists.txt"
+                    "${OF_LIBS_UTF8_PREFIX}/src/utf8B/CMakeLists.txt"
 )
 ExternalProject_Get_Property(utf8B INSTALL_DIR)
 list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
@@ -272,18 +270,17 @@ unset(INSTALL_DIR)
 #////////
 
 #// kissfft
-set(OF_LIBS_KISSFFT_PREFIX "${OF_LIBS_PATH}/kissfft")
-set(OF_LIBS_KISSFFT_CMAKE "${OF_LIBS_KISSFFT_PREFIX}/cmake")
+set(OF_LIBS_KISSFFT_PREFIX "${CMAKE_BINARY_DIR}/kissfft")
 ExternalProject_Add(kissfftB
     HG_REPOSITORY http://hg.code.sf.net/p/kissfft/code
-    PREFIX "${OF_LIBS_KISSFFT_CMAKE}"
-    INSTALL_DIR "${OF_LIBS_KISSFFT_CMAKE}/install"
+    PREFIX "${OF_LIBS_KISSFFT_PREFIX}"
+    INSTALL_DIR "${OF_LIBS_KISSFFT_PREFIX}/install"
     CMAKE_ARGS
-        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_KISSFFT_CMAKE}/install"
+        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_KISSFFT_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/kissfft_CMakeLists.txt"
-                    "${OF_LIBS_KISSFFT_CMAKE}/src/kissfftB/CMakeLists.txt"
+                    "${OF_LIBS_KISSFFT_PREFIX}/src/kissfftB/CMakeLists.txt"
 )
 ExternalProject_Get_Property(kissfftB INSTALL_DIR)
 list(APPEND OF_EXTERNAL_LIBRARY_DIRECTORIES "${INSTALL_DIR}/lib")
@@ -295,18 +292,18 @@ unset(INSTALL_DIR)
 #////////
 
 #// json
-set(OF_LIBS_JSON_PREFIX "${OF_LIBS_PATH}/json")
-set(OF_LIBS_JSON_CMAKE "${OF_LIBS_JSON_PREFIX}/cmake")
+set(OF_LIBS_JSON_PREFIX "${CMAKE_BINARY_DIR}/json")
+#/master/src/json.hpp
 ExternalProject_Add(jsonB
-    URL "https://raw.githubusercontent.com/nlohmann/json/master/src/json.hpp"
-    DOWNLOAD_NO_EXTRACT 1
-    PREFIX "${OF_LIBS_JSON_CMAKE}"
-    INSTALL_DIR "${OF_LIBS_JSON_CMAKE}/install"
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+#    DOWNLOAD_NO_EXTRACT 1
+    PREFIX "${OF_LIBS_JSON_PREFIX}"
+    INSTALL_DIR "${OF_LIBS_JSON_PREFIX}/install"
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
-                    "${OF_LIBS_JSON_CMAKE}/src/json.hpp"
-                    "${OF_LIBS_JSON_CMAKE}/install/include/json.hpp"
+                    "${OF_LIBS_JSON_PREFIX}/src/jsonB/src/json.hpp"
+                    "${OF_LIBS_JSON_PREFIX}/install/include/json.hpp"
 )
 ExternalProject_Get_Property(jsonB INSTALL_DIR)
 list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
@@ -360,11 +357,17 @@ list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES
 #////////
 
 #// rtaudio
-pkg_check_modules(RTAUDIO REQUIRED rtaudio)
-list(APPEND OF_EXTERNAL_LIBRARIES ${RTAUDIO_LIBRARIES})
-list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE_DIRS})
-list(APPEND OF_COMPILER_FLAGS ${RTAUDIO_CFLAGS_OTHER})
-list(APPEND OF_LINKER_FLAGS ${RTAUDIO_LDFLAGS_OTHER})
+find_file(RTAUDIO_INCLUDE RtAudio.h)
+if (RTAUDIO_INCLUDE STREQUAL "RTAUDIO_INCLUDE-NOTFOUND")
+    message(FATAL_ERROR "rtaudio not found")
+endif ()
+get_filename_component(RTAUDIO_INCLUDE_DIR ${RTAUDIO_INCLUDE} DIRECTORY)
+find_library(RTAUDIO_LIBRARY rtaudio)
+if (RTAUDIO_LIBRARY STREQUAL "RTAUDIO_LIBRARY-NOTFOUND")
+    message(FATAL_ERROR "rtaudio not found")
+endif ()
+list(APPEND OF_EXTERNAL_LIBRARIES ${RTAUDIO_LIBRARY})
+list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE_DIR})
 #////////
 
 #// OpenAL
