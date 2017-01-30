@@ -1,0 +1,13 @@
+diff --git a/libs/openFrameworks/utils/ofConstants.h b/libs/openFrameworks/utils/ofConstants.h
+index f18c52b34..1b22e0404 100644
+--- a/libs/openFrameworks/utils/ofConstants.h
++++ b/libs/openFrameworks/utils/ofConstants.h
+@@ -67,7 +67,7 @@ enum ofTargetPlatform{
+ #include <unordered_map>
+ #include <memory>
+ 
+-#define GLM_SWIZZLE
++#define GLM_FORCE_SWIZZLE
+ #define GLM_FORCE_SIZE_FUNC
+ #include "glm/glm.hpp"
+ #include "glm/ext.hpp"
