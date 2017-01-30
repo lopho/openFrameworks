@@ -228,9 +228,11 @@ set(OF_EXTERNAL_DEPENDENCIES "")
 include(ExternalProject)
 
 #// tess2
+set(OF_LIBS_TESS2_VERSION "v1.0.1")
 set(OF_LIBS_TESS2_PREFIX "${CMAKE_BINARY_DIR}/tess2")
 ExternalProject_Add(tess2B
     GIT_REPOSITORY https://github.com/memononen/libtess2.git
+    GIT_TAG ${OF_LIBS_TESS2_VERSION}
     PREFIX "${OF_LIBS_TESS2_PREFIX}"
     INSTALL_DIR "${OF_LIBS_TESS2_PREFIX}/install"
     CMAKE_ARGS
@@ -250,9 +252,11 @@ unset(INSTALL_DIR)
 #////////
 
 #// utf8cpp
+set(OF_LIBS_UTF8_VERSION "v2.3.5")
 set(OF_LIBS_UTF8_PREFIX "${CMAKE_BINARY_DIR}/utf8")
 ExternalProject_Add(utf8B
-    SVN_REPOSITORY https://svn.code.sf.net/p/utfcpp/code
+    GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git
+    GIT_TAG ${OF_LIBS_UTF8_VERSION}
     PREFIX "${OF_LIBS_UTF8_PREFIX}"
     INSTALL_DIR "${OF_LIBS_UTF8_PREFIX}/install"
     CMAKE_ARGS
@@ -270,9 +274,11 @@ unset(INSTALL_DIR)
 #////////
 
 #// kissfft
+set(OF_LIBS_KISSFFT_VERSION "v130")
 set(OF_LIBS_KISSFFT_PREFIX "${CMAKE_BINARY_DIR}/kissfft")
 ExternalProject_Add(kissfftB
     HG_REPOSITORY http://hg.code.sf.net/p/kissfft/code
+    HG_TAG ${OF_LIBS_KISSFFT_VERSION}
     PREFIX "${OF_LIBS_KISSFFT_PREFIX}"
     INSTALL_DIR "${OF_LIBS_KISSFFT_PREFIX}/install"
     CMAKE_ARGS
@@ -292,18 +298,19 @@ unset(INSTALL_DIR)
 #////////
 
 #// json
+set(OF_LIBS_JSON_VERSION "v2.1.0")
 set(OF_LIBS_JSON_PREFIX "${CMAKE_BINARY_DIR}/json")
-#/master/src/json.hpp
 ExternalProject_Add(jsonB
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-#    DOWNLOAD_NO_EXTRACT 1
+    GIT_TAG ${OF_LIBS_JSON_VERSION}
     PREFIX "${OF_LIBS_JSON_PREFIX}"
     INSTALL_DIR "${OF_LIBS_JSON_PREFIX}/install"
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ""
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
-                    "${OF_LIBS_JSON_PREFIX}/src/jsonB/src/json.hpp"
-                    "${OF_LIBS_JSON_PREFIX}/install/include/json.hpp"
+    CMAKE_ARGS
+        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_JSON_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+                    "${OF_CMAKE_FILES}/json_CMakeLists.txt"
+                    "${OF_LIBS_JSON_PREFIX}/src/jsonB/CMakeLists.txt"
 )
 ExternalProject_Get_Property(jsonB INSTALL_DIR)
 list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
@@ -311,6 +318,24 @@ install(DIRECTORY "${INSTALL_DIR}/include/" DESTINATION include)
 list(APPEND OF_EXTERNAL_DEPENDENCIES jsonB)
 unset(INSTALL_DIR)
 #////////
+
+#// glm
+set(OF_LIBS_GLM_VERSION "0.9.8.4")
+set(OF_LIBS_GLM_PREFIX "${CMAKE_BINARY_DIR}/glm")
+ExternalProject_Add(glmB
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG ${OF_LIBS_GLM_VERSION}
+    PREFIX "${OF_LIBS_GLM_PREFIX}"
+    INSTALL_DIR "${OF_LIBS_GLM_PREFIX}/install"
+    CMAKE_ARGS
+        "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_GLM_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+)
+ExternalProject_Get_Property(glmB INSTALL_DIR)
+list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
+install(DIRECTORY "${INSTALL_DIR}/include/" DESTINATION include)
+unset(INSTALL_DIR)
+
 
 #// svgtiny
 # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
@@ -361,13 +386,13 @@ find_file(RTAUDIO_INCLUDE RtAudio.h)
 if (RTAUDIO_INCLUDE STREQUAL "RTAUDIO_INCLUDE-NOTFOUND")
     message(FATAL_ERROR "rtaudio not found")
 endif ()
-get_filename_component(RTAUDIO_INCLUDE_DIR ${RTAUDIO_INCLUDE} DIRECTORY)
+get_filename_component(RTAUDIO_INCLUDE ${RTAUDIO_INCLUDE} DIRECTORY)
 find_library(RTAUDIO_LIBRARY rtaudio)
 if (RTAUDIO_LIBRARY STREQUAL "RTAUDIO_LIBRARY-NOTFOUND")
     message(FATAL_ERROR "rtaudio not found")
 endif ()
 list(APPEND OF_EXTERNAL_LIBRARIES ${RTAUDIO_LIBRARY})
-list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE_DIR})
+list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE})
 #////////
 
 #// OpenAL
@@ -401,13 +426,13 @@ find_file(FREEIMAGE_INCLUDE FreeImage.h)
 if (FREEIMAGE_INCLUDE STREQUAL "FREEIMAGE_INCLUDE-NOTFOUND")
     message(FATAL_ERROR "freeimage not found")
 endif ()
-get_filename_component(FREEIMAGE_INCLUDE_DIR ${FREEIMAGE_INCLUDE} DIRECTORY)
+get_filename_component(FREEIMAGE_INCLUDE ${FREEIMAGE_INCLUDE} DIRECTORY)
 find_library(FREEIMAGE_LIBRARY freeimage)
 if (FREEIMAGE_LIBRARY STREQUAL "FREEIMAGE_LIBRARY-NOTFOUND")
     message(FATAL_ERROR "freeimage not found")
 endif ()
 list(APPEND OF_EXTERNAL_LIBRARIES ${FREEIMAGE_LIBRARY})
-list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${FREEIMAGE_INCLUDE_DIR})
+list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${FREEIMAGE_INCLUDE})
 #////////
 
 #// mpg123
@@ -421,13 +446,13 @@ find_file(PUGIXML_INCLUDE pugixml.hpp)
 if (PUGIXML_INCLUDE STREQUAL "PUGIXML_INCLUDE-NOTFOUND")
     message(FATAL_ERROR "pugixml not found")
 endif ()
-get_filename_component(PUGIXML_INCLUDE_DIR ${PUGIXML_INCLUDE} DIRECTORY)
+get_filename_component(PUGIXML_INCLUDE ${PUGIXML_INCLUDE} DIRECTORY)
 find_library(PUGIXML_LIBRARY pugixml)
 if (PUGIXML_LIBRARY STREQUAL "PUGIXML_LIBRARY-NOTFOUND")
     message(FATAL_ERROR "pugixml not found")
 endif ()
 list(APPEND OF_EXTERNAL_LIBRARIES ${PUGIXML_LIBRARY})
-list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${PUGIXML_INCLUDE_DIR})
+list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${PUGIXML_INCLUDE})
 #////////
 
 #// glfw3
