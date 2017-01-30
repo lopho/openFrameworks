@@ -25,6 +25,7 @@
 
 project(openFrameworks)
 cmake_minimum_required(VERSION 3.0)
+cmake_policy(VERSION 3.0)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/modules")
 set(OF_CMAKE_FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/cmakelists")
 find_package(PkgConfig REQUIRED)
@@ -53,7 +54,7 @@ set(OF_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(HOST_OS ${CMAKE_HOST_SYSTEM_NAME})
 message(STATUS "HOST_OS=${HOST_OS}")
 if (NOT HOST_OS STREQUAL "Linux")
-    message(FATAL_ERROR "Your OS (${HOST_OS}) is not supported. Only Linux is supported.")
+    message(WARNING "Your OS (${HOST_OS}) is not supported. Only Linux is supported.")
 endif ()
 
 #// Host architecture
@@ -61,19 +62,19 @@ include(TargetArch)
 # unknown ppc ppc64 ia64 x86_64 i386 arm (4-/8+) armv5 armv6 armv7
 target_architecture(HOST_ARCH)
 if (NOT HOST_ARCH STREQUAL "x86_64")
-    message(FATAL_ERROR "Your architecture (${HOST_ARCH}) is not supported. Only x86_64 is supported.")
+    message(WARNING "Your architecture (${HOST_ARCH}) is not supported. Only x86_64 is supported.")
 endif ()
 
 #// Platform OS
 set(PLATFORM_OS ${CMAKE_SYSTEM_NAME})
 if (NOT PLATFORM_OS STREQUAL "Linux")
-    message(FATAL_ERROR "Target OS (${PLATFORM_OS}) is not supported. Only Linux is supported.")
+    message(WARNING "Target OS (${PLATFORM_OS}) is not supported. Only Linux is supported.")
 endif ()
 
 #// Platform architecture
 set(PLATFORM_ARCH ${HOST_ARCH})
 if (NOT PLATFORM_ARCH STREQUAL "x86_64")
-    message(FATAL_ERROR "Target architecture (${PLATFORM_ARCH}) is not supported. Only x86_64 is supported.")
+    message(WARNING "Target architecture (${PLATFORM_ARCH}) is not supported. Only x86_64 is supported.")
 endif ()
 
 #// library subpath
@@ -231,8 +232,9 @@ include(ExternalProject)
 set(OF_LIBS_TESS2_VERSION "v1.0.1")
 set(OF_LIBS_TESS2_PREFIX "${CMAKE_BINARY_DIR}/tess2")
 ExternalProject_Add(tess2B
-    GIT_REPOSITORY https://github.com/memononen/libtess2.git
-    GIT_TAG ${OF_LIBS_TESS2_VERSION}
+    URL "https://github.com/memononen/libtess2/archive/${OF_LIBS_TESS2_VERSION}.tar.gz"
+#    GIT_REPOSITORY https://github.com/memononen/libtess2.git
+#    GIT_TAG ${OF_LIBS_TESS2_VERSION}
     PREFIX "${OF_LIBS_TESS2_PREFIX}"
     INSTALL_DIR "${OF_LIBS_TESS2_PREFIX}/install"
     CMAKE_ARGS
@@ -255,8 +257,9 @@ unset(INSTALL_DIR)
 set(OF_LIBS_UTF8_VERSION "v2.3.5")
 set(OF_LIBS_UTF8_PREFIX "${CMAKE_BINARY_DIR}/utf8")
 ExternalProject_Add(utf8B
-    GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git
-    GIT_TAG ${OF_LIBS_UTF8_VERSION}
+    URL "https://github.com/nemtrif/utfcpp/archive/${OF_LIBS_UTF8_VERSION}.tar.gz"
+#    GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git
+#    GIT_TAG ${OF_LIBS_UTF8_VERSION}
     PREFIX "${OF_LIBS_UTF8_PREFIX}"
     INSTALL_DIR "${OF_LIBS_UTF8_PREFIX}/install"
     CMAKE_ARGS
@@ -275,10 +278,12 @@ unset(INSTALL_DIR)
 
 #// kissfft
 set(OF_LIBS_KISSFFT_VERSION "v130")
+set(OF_LIBS_KISSFFT_VERSION_COMMIT "b354a59534b0a77c43c67deb1eb1bc39eb99b487")
 set(OF_LIBS_KISSFFT_PREFIX "${CMAKE_BINARY_DIR}/kissfft")
 ExternalProject_Add(kissfftB
-    HG_REPOSITORY http://hg.code.sf.net/p/kissfft/code
-    HG_TAG ${OF_LIBS_KISSFFT_VERSION}
+    URL "https://sourceforge.net/code-snapshots/hg/k/ki/kissfft/code/kissfft-code-${OF_LIBS_KISSFFT_VERSION_COMMIT}.zip"
+#    HG_REPOSITORY http://hg.code.sf.net/p/kissfft/code
+#    HG_TAG ${OF_LIBS_KISSFFT_VERSION}
     PREFIX "${OF_LIBS_KISSFFT_PREFIX}"
     INSTALL_DIR "${OF_LIBS_KISSFFT_PREFIX}/install"
     CMAKE_ARGS
@@ -301,8 +306,9 @@ unset(INSTALL_DIR)
 set(OF_LIBS_JSON_VERSION "v2.1.0")
 set(OF_LIBS_JSON_PREFIX "${CMAKE_BINARY_DIR}/json")
 ExternalProject_Add(jsonB
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG ${OF_LIBS_JSON_VERSION}
+    URL "https://github.com/nlohmann/json/archive/${OF_LIBS_JSON_VERSION}.tar.gz"
+#    GIT_REPOSITORY https://github.com/nlohmann/json.git
+#    GIT_TAG ${OF_LIBS_JSON_VERSION}
     PREFIX "${OF_LIBS_JSON_PREFIX}"
     INSTALL_DIR "${OF_LIBS_JSON_PREFIX}/install"
     CMAKE_ARGS
@@ -323,8 +329,9 @@ unset(INSTALL_DIR)
 set(OF_LIBS_GLM_VERSION "0.9.8.4")
 set(OF_LIBS_GLM_PREFIX "${CMAKE_BINARY_DIR}/glm")
 ExternalProject_Add(glmB
-    GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG ${OF_LIBS_GLM_VERSION}
+    URL "https://github.com/g-truc/glm/archive/${OF_LIBS_GLM_VERSION}.tar.gz"
+#    GIT_REPOSITORY https://github.com/g-truc/glm.git
+#    GIT_TAG ${OF_LIBS_GLM_VERSION}
     PREFIX "${OF_LIBS_GLM_PREFIX}"
     INSTALL_DIR "${OF_LIBS_GLM_PREFIX}/install"
     CMAKE_ARGS
@@ -382,17 +389,25 @@ list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES
 #////////
 
 #// rtaudio
-find_file(RTAUDIO_INCLUDE RtAudio.h)
-if (RTAUDIO_INCLUDE STREQUAL "RTAUDIO_INCLUDE-NOTFOUND")
-    message(FATAL_ERROR "rtaudio not found")
+pkg_check_modules(RTAUDIO rtaudio)
+if (NOT RTAUDIO_FOUND)
+    find_file(RTAUDIO_INCLUDE RtAudio.h)
+    if (RTAUDIO_INCLUDE STREQUAL "RTAUDIO_INCLUDE-NOTFOUND")
+        message(FATAL_ERROR "rtaudio not found")
+    endif ()
+    get_filename_component(RTAUDIO_INCLUDE ${RTAUDIO_INCLUDE} DIRECTORY)
+    find_library(RTAUDIO_LIBRARY rtaudio)
+    if (RTAUDIO_LIBRARY STREQUAL "RTAUDIO_LIBRARY-NOTFOUND")
+        message(FATAL_ERROR "rtaudio not found")
+    endif ()
+    list(APPEND OF_EXTERNAL_LIBRARIES ${RTAUDIO_LIBRARY})
+    list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE})
+else ()
+    list(APPEND OF_EXTERNAL_LIBRARIES ${RTAUDIO_LIBRARIES})
+    list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE_DIRS})
+    list(APPEND OF_COMPILER_FLAGS ${RTAUDIO_CFLAGS_OTHER})
+    list(APPEND OF_LINKER_FLAGS ${RTAUDIO_LDFLAGS_OTHER})
 endif ()
-get_filename_component(RTAUDIO_INCLUDE ${RTAUDIO_INCLUDE} DIRECTORY)
-find_library(RTAUDIO_LIBRARY rtaudio)
-if (RTAUDIO_LIBRARY STREQUAL "RTAUDIO_LIBRARY-NOTFOUND")
-    message(FATAL_ERROR "rtaudio not found")
-endif ()
-list(APPEND OF_EXTERNAL_LIBRARIES ${RTAUDIO_LIBRARY})
-list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES ${RTAUDIO_INCLUDE})
 #////////
 
 #// OpenAL
