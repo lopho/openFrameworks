@@ -1,0 +1,78 @@
+diff --git a/scripts/linux/archlinux/install_dependencies.sh b/scripts/linux/archlinux/install_dependencies.sh
+index 1c458da..d8ac2be 100755
+--- a/scripts/linux/archlinux/install_dependencies.sh
++++ b/scripts/linux/archlinux/install_dependencies.sh
+@@ -10,7 +10,7 @@ if [ $EUID != 0 ]; then
+    exit 1
+ fi
+ 
+-pacman -Sy --needed make pkg-config gcc openal glew freeglut freeimage gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav opencv libxcursor assimp boost glfw-x11 uriparser curl pugixml
++pacman -Sy --needed make pkg-config gcc openal glew freeglut freeimage gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav opencv libxcursor assimp boost glfw-x11 uriparser curl pugixml glm
+ 
+ exit_code=$?
+ if [ $exit_code != 0 ]; then
+diff --git a/scripts/linux/archlinux_armv7/install_dependencies.sh b/scripts/linux/archlinux_armv7/install_dependencies.sh
+index 7d5dfcb..1c0a5ee 100644
+--- a/scripts/linux/archlinux_armv7/install_dependencies.sh
++++ b/scripts/linux/archlinux_armv7/install_dependencies.sh
+@@ -10,7 +10,7 @@ if [ $EUID != 0 ]; then
+    exit 1
+ fi
+ 
+-pacman -Sy --needed make pkg-config gcc openal glew freeglut freeimage gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav raspberrypi-firmware gst-omx-rpi assimp boost libxcursor opencv assimp glfw-x11  uriparser curl pugixml
++pacman -Sy --needed make pkg-config gcc openal glew freeglut freeimage gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav raspberrypi-firmware gst-omx-rpi assimp boost libxcursor opencv assimp glfw-x11  uriparser curl pugixml glm
+ 
+ wget http://ci.openframeworks.cc/rtaudio-armv7hf.tar.bz2
+ tar xjf rtaudio-armv7hf.tar.bz2 -C /
+diff --git a/scripts/linux/chip/install_dependencies.sh b/scripts/linux/chip/install_dependencies.sh
+index f474e35..b1a94c6 100644
+--- a/scripts/linux/chip/install_dependencies.sh
++++ b/scripts/linux/chip/install_dependencies.sh
+@@ -35,7 +35,7 @@ fi
+ 
+ 
+ echo "installing OF dependencies"
+-apt-get install freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev libopencv-dev libassimp-dev librtaudio-dev libboost-filesystem-dev libglfw3-dev  liburiparser-dev libcurl4-openssl-dev libpugixml-dev
++apt-get install freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev libopencv-dev libassimp-dev librtaudio-dev libboost-filesystem-dev libglfw3-dev  liburiparser-dev libcurl4-openssl-dev libpugixml-dev libglm-dev
+ exit_code=$?
+ if [ $exit_code != 0 ]; then
+     echo "error installing dependencies, there could be an error with your internet connection"
+diff --git a/scripts/linux/debian/install_dependencies.sh b/scripts/linux/debian/install_dependencies.sh
+index c6b9dbb..3c131e3 100755
+--- a/scripts/linux/debian/install_dependencies.sh
++++ b/scripts/linux/debian/install_dependencies.sh
+@@ -35,7 +35,7 @@ fi
+ 
+ 
+ echo "installing OF dependencies"
+-apt-get install freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libgl1-mesa-dev libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev libopencv-dev libegl1-mesa-dev libgles1-mesa-dev libgles2-mesa-dev libassimp-dev librtaudio-dev libboost-filesystem-dev libglfw3-dev  liburiparser-dev libcurl4-openssl-dev libpugixml-dev
++apt-get install freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libgl1-mesa-dev libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev libopencv-dev libegl1-mesa-dev libgles1-mesa-dev libgles2-mesa-dev libassimp-dev librtaudio-dev libboost-filesystem-dev libglfw3-dev  liburiparser-dev libcurl4-openssl-dev libpugixml-dev libglm-dev
+ exit_code=$?
+ if [ $exit_code != 0 ]; then
+     echo "error installing dependencies, there could be an error with your internet connection"
+diff --git a/scripts/linux/fedora/install_dependencies.sh b/scripts/linux/fedora/install_dependencies.sh
+index a15edb1..2a27143 100755
+--- a/scripts/linux/fedora/install_dependencies.sh
++++ b/scripts/linux/fedora/install_dependencies.sh
+@@ -10,7 +10,7 @@ if [ $EUID != 0 ]; then
+    exit 1
+ fi
+ 
+-yum install freeglut-devel alsa-lib-devel libXmu-devel libXxf86vm-devel gcc-c++ libraw1394-devel gstreamer1-devel gstreamer1-plugins-base-devel libudev-devel libtheora-devel libvorbis-devel openal-soft-devel libsndfile-devel python-lxml glew-devel flac-devel freeimage-devel cairo-devel pulseaudio-libs-devel openssl-devel libusbx-devel gtk2-devel libXrandr-devel libXi-devel opencv-devel libX11-devel assimp-devel rtaudio-devel boost-devel gtk3-devel libglfw3-devel uriparser-devel curl-devel pugixml-devel
++yum install freeglut-devel alsa-lib-devel libXmu-devel libXxf86vm-devel gcc-c++ libraw1394-devel gstreamer1-devel gstreamer1-plugins-base-devel libudev-devel libtheora-devel libvorbis-devel openal-soft-devel libsndfile-devel python-lxml glew-devel flac-devel freeimage-devel cairo-devel pulseaudio-libs-devel openssl-devel libusbx-devel gtk2-devel libXrandr-devel libXi-devel opencv-devel libX11-devel assimp-devel rtaudio-devel boost-devel gtk3-devel libglfw3-devel uriparser-devel curl-devel pugixml-devel glm
+ 
+ exit_code=$?
+ if [ $exit_code != 0 ]; then
+diff --git a/scripts/linux/ubuntu/install_dependencies.sh b/scripts/linux/ubuntu/install_dependencies.sh
+index 7371364..971d5f2 100755
+--- a/scripts/linux/ubuntu/install_dependencies.sh
++++ b/scripts/linux/ubuntu/install_dependencies.sh
+@@ -163,7 +163,7 @@ else
+     GLFW_PKG=
+ fi
+ 
+-PACKAGES="curl libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++${CXX_VER} libgl1-mesa-dev${XTAG} libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev  libopencv-dev libassimp-dev librtaudio-dev libboost-filesystem${BOOST_VER}-dev libgstreamer${GSTREAMER_VERSION}-dev libgstreamer-plugins-base${GSTREAMER_VERSION}-dev  ${GSTREAMER_FFMPEG} gstreamer${GSTREAMER_VERSION}-pulseaudio gstreamer${GSTREAMER_VERSION}-x gstreamer${GSTREAMER_VERSION}-plugins-bad gstreamer${GSTREAMER_VERSION}-alsa gstreamer${GSTREAMER_VERSION}-plugins-base gstreamer${GSTREAMER_VERSION}-plugins-good gdb ${GLFW_PKG} liburiparser-dev libcurl4-openssl-dev libpugixml-dev"
++PACKAGES="curl libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++${CXX_VER} libgl1-mesa-dev${XTAG} libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev  libopencv-dev libassimp-dev librtaudio-dev libboost-filesystem${BOOST_VER}-dev libgstreamer${GSTREAMER_VERSION}-dev libgstreamer-plugins-base${GSTREAMER_VERSION}-dev  ${GSTREAMER_FFMPEG} gstreamer${GSTREAMER_VERSION}-pulseaudio gstreamer${GSTREAMER_VERSION}-x gstreamer${GSTREAMER_VERSION}-plugins-bad gstreamer${GSTREAMER_VERSION}-alsa gstreamer${GSTREAMER_VERSION}-plugins-base gstreamer${GSTREAMER_VERSION}-plugins-good gdb ${GLFW_PKG} liburiparser-dev libcurl4-openssl-dev libpugixml-dev libglm-dev"
+ 
+ echo "installing OF dependencies"
+ echo "OF needs to install the following packages using apt-get:"
