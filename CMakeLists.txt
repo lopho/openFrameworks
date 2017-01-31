@@ -240,6 +240,9 @@ ExternalProject_Add(tess2B
     CMAKE_ARGS
         "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_TESS2_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+    CMAKE_CACHE_ARGS
+        "-DCMAKE_INSTALL_PREFIX:path=${OF_LIBS_TESS2_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/tess2_CMakeLists.txt"
                     "${OF_LIBS_TESS2_PREFIX}/src/tess2B/CMakeLists.txt"
@@ -265,6 +268,9 @@ ExternalProject_Add(utf8B
     CMAKE_ARGS
         "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_UTF8_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+    CMAKE_CACHE_ARGS
+        "-DCMAKE_INSTALL_PREFIX:path=${OF_LIBS_UTF8_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/utf8_CMakeLists.txt"
                     "${OF_LIBS_UTF8_PREFIX}/src/utf8B/CMakeLists.txt"
@@ -289,6 +295,9 @@ ExternalProject_Add(kissfftB
     CMAKE_ARGS
         "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_KISSFFT_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+    CMAKE_CACHE_ARGS
+        "-DCMAKE_INSTALL_PREFIX:path=${OF_LIBS_KISSFFT_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/kissfft_CMakeLists.txt"
                     "${OF_LIBS_KISSFFT_PREFIX}/src/kissfftB/CMakeLists.txt"
@@ -314,6 +323,9 @@ ExternalProject_Add(jsonB
     CMAKE_ARGS
         "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_JSON_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+    CMAKE_CACHE_ARGS
+        "-DCMAKE_INSTALL_PREFIX:path=${OF_LIBS_JSON_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
                     "${OF_CMAKE_FILES}/json_CMakeLists.txt"
                     "${OF_LIBS_JSON_PREFIX}/src/jsonB/CMakeLists.txt"
@@ -337,6 +349,9 @@ ExternalProject_Add(glmB
     CMAKE_ARGS
         "-DCMAKE_INSTALL_PREFIX=${OF_LIBS_GLM_PREFIX}/install"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+    CMAKE_CACHE_ARGS
+        "-DCMAKE_INSTALL_PREFIX:path=${OF_LIBS_GLM_PREFIX}/install"
+        "-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}"
 )
 ExternalProject_Get_Property(glmB INSTALL_DIR)
 list(APPEND OF_EXTERNAL_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
