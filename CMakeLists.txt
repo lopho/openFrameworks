@@ -582,6 +582,15 @@ set_target_properties(openFrameworks_static
 set_target_properties(openFrameworks_shared
         PROPERTIES OUTPUT_NAME openFrameworks
         DEBUG_OUTPUT_NAME openFrameworksDebug)
+set_target_properties(openFrameworks_shared
+        PROPERTIES
+            SOVERSION 0
+            VERSION 0.10.0
+)
+set_target_properties(openFrameworks_static
+        PROPERTIES
+            VERSION 0.10.0
+)
 
 target_link_libraries(openFrameworks_static ${OF_EXTERNAL_LIBRARIES})
 target_link_libraries(openFrameworks_shared ${OF_EXTERNAL_LIBRARIES})
