@@ -284,10 +284,11 @@ unset(INSTALL_DIR)
 
 #// kissfft
 set(OF_LIBS_KISSFFT_VERSION "v130")
-set(OF_LIBS_KISSFFT_VERSION_COMMIT "b354a59534b0a77c43c67deb1eb1bc39eb99b487")
+set(OF_LIBS_KISSFFT_VERSION_SF "130")
+set(OF_LIBS_KISSFFT_VERSION_SF_UNDERSCORE "v1_3_0")
 set(OF_LIBS_KISSFFT_PREFIX "${CMAKE_BINARY_DIR}/kissfft")
 ExternalProject_Add(kissfftB
-    URL "https://sourceforge.net/code-snapshots/hg/k/ki/kissfft/code/kissfft-code-${OF_LIBS_KISSFFT_VERSION_COMMIT}.zip"
+    URL "https://downloads.sourceforge.net/project/kissfft/kissfft/${OF_LIBS_KISSFFT_VERSION_SF_UNDERSCORE}/kiss_fft${OF_LIBS_KISSFFT_VERSION_SF}.tar.gz"
 #    HG_REPOSITORY http://hg.code.sf.net/p/kissfft/code
 #    HG_TAG ${OF_LIBS_KISSFFT_VERSION}
     PREFIX "${OF_LIBS_KISSFFT_PREFIX}"
