@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.0)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 #// Options ////////////////////////////////////////////////////////////////////
@@ -59,12 +60,20 @@ set(OPENFRAMEWORKS_INCLUDE_DIRS
 set(OF_LIB_DIR "${OF_ROOT_DIR}/lib")
 
 if (OF_STATIC)
-    file(GLOB_RECURSE OPENFRAMEWORKS_LIBS "${OF_LIB_DIR}/*.a")
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(OPENFRAMEWORKS_LIBS "${OF_LIB_DIR}/libopenFrameworksDebug.a")
+    else ()
+        set(OPENFRAMEWORKS_LIBS "${OF_LIB_DIR}/libopenFrameworks.a")
+    endif ()
     if (NOT OPENFRAMEWORKS_LIBS)
         message(FATAL_ERROR "No static openFrameworks libraries found in ${OF_LIB_DIR} folder.")
     endif ()
 else ()
-    file(GLOB_RECURSE OPENFRAMEWORKS_LIBS "${OF_LIB_DIR}/*.so")
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(OPENFRAMEWORKS_LIBS "${OF_LIB_DIR}/libopenFrameworksDebug.so")
+    else ()
+        set(OPENFRAMEWORKS_LIBS "${OF_LIB_DIR}/libopenFrameworks.so")
+    endif ()
     if (NOT OPENFRAMEWORKS_LIBS)
         message(FATAL_ERROR "No shared openFrameworks libraries found in ${OF_LIB_DIR} folder.")
     endif ()
