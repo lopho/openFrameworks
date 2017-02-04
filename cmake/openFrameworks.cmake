@@ -17,14 +17,17 @@ endif ()
 
 set(OF_LINKER_FLAGS "")
 
-set(OF_COMPILER_FLAGS "")
-list(APPEND OF_COMPILER_FLAGS
+set(OF_DEFINITIONS "")
+list(APPEND OF_DEFINITIONS
     -DGCC_HAS_REGEX
     -DOF_USING_GTK
     -DOF_USING_MPG123
+    -D_REENTRANT
+)
+set(OF_COMPILER_FLAGS "")
+list(APPEND OF_COMPILER_FLAGS
     -fPIC
     -fPIE
-    -D_REENTRANT
     -pthread
 )
 
@@ -220,6 +223,9 @@ endforeach ()
 foreach (FLAG ${OF_COMPILER_FLAGS_RELEASE})
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FLAG}")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FLAG}")
+endforeach ()
+foreach (FLAG ${OF_DEFINITIONS})
+    add_definitions(${FLAG})
 endforeach ()
 
 if(OF_STATIC)
